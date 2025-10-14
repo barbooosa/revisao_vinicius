@@ -11,6 +11,11 @@ class UserController extends Controller
 {
     protected $service;
 
+    private const TIPO_USUARIO_ADMIN = 1;
+    private const TIPO_USUARIO_PROPRIETARIO = 2;
+    private const TIPO_USUARIO_INQUILINO = 3;
+
+
     public function __construct(UserService $service)
     {
         $this->service = $service;
@@ -25,28 +30,32 @@ class UserController extends Controller
 
     public function create(UserRequest $request)
     {
-        $user = $this->service->create($request);
+        $data = $request->validated();
+        
+        $data['tipo_usuario_id'] = self::TIPO_USUARIO_INQUILINO;
+
+        $user = $this->service->create($data);
 
         return ['status' => true, 'message' => Geral::USUARIO_CADASTRADO, "usuario" => $user];
     }
 
     public function store(Request $request)
     {
-        //
+        // ...
     }
 
     public function edit(string $id)
     {
-        //
+        // ...
     }
 
     public function update(Request $request, string $id)
     {
-        //
+        // ...
     }
 
     public function destroy(string $id)
     {
-        //
+        // ...
     }
 }
