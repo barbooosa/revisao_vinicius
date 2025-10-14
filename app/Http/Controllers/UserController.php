@@ -32,7 +32,9 @@ class UserController extends Controller
     {
         $data = $request->validated();
         
-        $data['tipo_usuario_id'] = self::TIPO_USUARIO_INQUILINO;
+        $data['tipo_usuario_id'] == 1 ==  self::TIPO_USUARIO_ADMIN;
+        $data['tipo_usuario_id'] == 2 ==  self::TIPO_USUARIO_PROPRIETARIO;
+        $data['tipo_usuario_id'] == 3 ==  self::TIPO_USUARIO_INQUILINO;
 
         $user = $this->service->create($data);
 
