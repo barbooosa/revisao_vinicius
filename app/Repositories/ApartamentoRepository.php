@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Apartamento;
+use Illuminate\Support\Facades\Auth; // É bom usar o Facade Auth para clareza
 
 class ApartamentoRepository
 {
@@ -13,11 +14,13 @@ class ApartamentoRepository
 
     public function create($data)
     {
+        $proprietarioId = Auth::id();
+
         return Apartamento::create([
             'numero' => $data['numero'],
             'bloco_id' => $data['bloco'],
             'user_morador' => $data['morador'],
-            'user_proprietario' => $data['proprietario']
+            'user_proprietario' => $proprietarioId 
         ]);
 
     }
@@ -44,4 +47,3 @@ class ApartamentoRepository
         //
     }
 }
-
