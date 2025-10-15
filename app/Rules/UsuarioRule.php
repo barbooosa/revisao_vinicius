@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use App\Constants\Geral;
+use Illuminate\Support\Facades\Auth;
 
 class UsuarioRule
 {
@@ -10,11 +11,23 @@ class UsuarioRule
     {
         $isProprietario = auth()->user()->tipo->tipo == 'Proprietário';
 
-        if($isProprietario == false){
+        if ($isProprietario == false) {
             $this->failedAuthorization();
         }
 
         return $isProprietario;
+    }
+
+ 
+    public function isAdmin()
+    {
+        $isAdmin = Auth::user()->tipo->tipo == 'Admin';
+
+        if ($isAdmin == false) {
+            $this->failedAuthorization();
+        }
+
+        return $isAdmin;
     }
 
     private function failedAuthorization()
