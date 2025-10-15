@@ -19,7 +19,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::prefix('user')->group(function() {
-        Route::get('/', [UserController::class, 'index']);
+        Route::get('/me', [UserController::class, 'index']); 
+        Route::get('/{id}', [UserController::class, 'show']); 
+        Route::put('/{id}', [UserController::class, 'update']);
+        Route::delete('/{id}', [UserController::class, 'destroy'])->middleware('is.admin');
     });
 
     Route::prefix('estado')->group(function () {
@@ -39,14 +42,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [CondominioController::class, 'list']);
         Route::get('/buscar', [CondominioController::class, 'search']);
 
-        Route::prefix('bloco')->group(function(){
+        Route::prefix('{condominio_id}/bloco')->group(function(){
             Route::post('/', [BlocoController::class, 'create']);
-            Route::get('/', [BlocoController::class, 'list']);
+            Route::get('/', [BlocoController::class, 'list']); 
+            Route::get('/{id}', [BlocoController::class, 'show']); 
 
-            Route::prefix('apartamento')->group(function(){
+            Route::prefix('{bloco_id}/apartamento')->group(function(){
                 Route::post('/', [ApartamentoController::class, 'create']);
                 Route::get('/', [ApartamentoController::class, 'list']);
-                Route::put('/atualizar/{uuid}', [ApartamentoController::class, 'update']);
+                Route::put('/{uuid}', [ApartamentoController::class, 'update']);
+                Route::delete('/{uuid}', [ApartamentoController::class, 'destroy']);
             });
         });
     });
