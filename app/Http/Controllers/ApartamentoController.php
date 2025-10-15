@@ -6,6 +6,7 @@ use App\Constants\Geral;
 use App\Http\Requests\ApartamentoRequest;
 use App\Services\ApartamentoService;
 use Illuminate\Http\Request;
+use App\Models\Apartamento; // Necessário para findOrFail
 
 class ApartamentoController extends Controller
 {
@@ -16,31 +17,20 @@ class ApartamentoController extends Controller
         $this->service = $service;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(ApartamentoRequest $request)
     {
+        $this->authorize('create', Apartamento::class);
+        
         $apartamento = $this->service->create($request);
 
-        if($apartamento == true){
+        if ($apartamento == true && $apartamento !== false) {
             return ['status' => true, 'message' => Geral::APARTAMENTO_CADASTRADO, 'apartamento' => $apartamento];
         } else {
             return ['status' => false, 'message' => Geral::APARTAMENTO_EXISTE, 'apartamento' => $apartamento];
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function list()
     {
         $apartamento = $this->service->list();
@@ -48,34 +38,24 @@ class ApartamentoController extends Controller
         return ['status' => true, 'message' => Geral::APARTAMENTO_ENCONTRADO, 'apartamento' => $apartamento];
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(ApartamentoRequest $request, string $id)
     {
-        //
-    }
+        $apartamento = Apartamento::findOrFail($id);
+        
+        $this->authorize('update', $apartamento);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    public function update(Request $request, string $id)
-    {
         $apartamento = $this->service->update($request, $id);
 
         return ['status' => true, 'message' => Geral::APARTAMENTO_ATUALIZADO, "apartamento" => $apartamento];
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $apartamento = Apartamento::findOrFail($id);
+
+        $this->authorize('delete', $apartamento);
+
+        $this->service->delete($apartamento); 
+        return ['status' => true, 'message' => Geral::APARTAMENTO_EXCLUIDO];
     }
 }
