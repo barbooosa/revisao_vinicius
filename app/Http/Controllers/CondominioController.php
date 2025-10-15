@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Constants\Geral;
-use App\Http\Requests\CondominioRequest;
+use App\Http\Requests\CondominioRequest; // Mantemos o Request para tipagem, mas o usamos indiretamente
 use App\Services\CondominioService;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; // Usamos Request para validar dentro do Controller
 
 class CondominioController extends Controller
 {
@@ -16,8 +16,15 @@ class CondominioController extends Controller
         $this->service = $service;
     }
 
-    public function create(CondominioRequest $request)
+    public function create(CondominioRequest $request) // Mantemos CondominioRequest para validações que já existam
     {
+        $request->validate([
+            'nome' => ['required', 'string', 'max:255'],
+        ], [
+            'nome.required' => 'O nome do condomínio é obrigatório para o cadastro.',
+        ]);
+        
+
         $condominio = $this->service->create($request);
         
         return ['status' => true, 'message' => Geral::CONDOMINIO_CADASTRADO, 'condominio' => $condominio];
