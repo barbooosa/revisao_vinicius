@@ -32,8 +32,17 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        $user = $request->user();
 
-        return ['status' => true, 'message' => Geral::USUARIO_DESLOGADO];
+        if ($user) {
+            $user->currentAccessToken()->delete();
+
+            return ['status' => true, 'message' => Geral::USUARIO_DESLOGADO];
+        }
+
+        return response()->json([
+            'status' => false, 
+            'message' => 'Falha ao deslogar. Token não encontrado ou inválido.',
+        ], 401);
     }
 }
