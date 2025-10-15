@@ -34,7 +34,8 @@ class EnderecoRequest extends FormRequest
             'cep' => 'required|string|min:9|max:9',
             'logradouro' => 'required|string',
             'complemento' => 'required|string',
-            'bairro' => 'required|string'
+            'bairro' => 'required|string',
+            'cidade' => 'required|string',
         ];
     }
 
